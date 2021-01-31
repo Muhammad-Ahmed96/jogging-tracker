@@ -31,12 +31,12 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         log_in @user
-        flash[:success] = "Account was succesfully updated!"
+        msg = "Account was succesfully created!"
         format.html { redirect_to @user }
-        format.json { render :show, status: :created, location: @user }
+        format.json { render json: {status: true, msg: msg, user_id: @user.id }}
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render json: {status: false, errors: @user.errors.full_messages }}
       end
     end
   end
@@ -45,12 +45,12 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        flash[:success] = "Account was succesfully updated!"
+        msg = "Account was succesfully updated!"
         format.html { redirect_to @user }
-        format.json { render :show, status: :ok, location: @user }
+        format.json { render json: {status: true, msg: msg }}
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: {status: false, errors: @user.errors.full_messages }}
       end
     end
   end
